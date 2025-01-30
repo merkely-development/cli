@@ -77,12 +77,13 @@ func printAttestationTypesListAsTable(raw string, out io.Writer, page int) error
 	rows := []string{}
 
 	for _, attestationType := range attestationTypes {
-		desc := ""
-		if description, ok := attestationType["description"].(string); ok {
-			desc = description
+		description := attestationType["description"]
+		if description == nil {
+			description = ""
 		}
 		latestVersion := len(attestationType["versions"].([]interface{}))
-		rows = append(rows, fmt.Sprintf("%s\t%s\t%d", attestationType["name"], desc, latestVersion))
+
+		rows = append(rows, fmt.Sprintf("%s\t%s\t%d", attestationType["name"], description, latestVersion))
 	}
 
 	tabFormattedPrint(out, header, rows)
